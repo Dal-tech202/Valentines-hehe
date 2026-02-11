@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ooohh ano kaya toh?</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff9aa2, #ffdde1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  overflow: hidden;
+}
+
+.container {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h1 {
+  color: #ff4d6d;
+}
+
+img {
+  width: 200px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  margin: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.yes {
+  background-color: #ff4d6d;
+  color: white;
+}
+
+.no {
+  background-color: #ddd;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+.heart {
+  position: absolute;
+  color: #ff4d6d;
+  font-size: 24px;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  0% {transform: translateY(100vh);}
+  100% {transform: translateY(-10vh);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Audio -->
+<audio id="happySound" src="Kids yay meme - Sound Effect(HD).mp3"></audio>
+
+
+<div class="container">
+  <img src="main.gif">
+  <h1>Will you be my Valentine love? ❤️</h1>
+  <button class="yes" onclick="sayYes()">Yes 💘</button>
+  <button class="no" onclick="pressNo()">No 😢</button>
+</div>
+
+<script>
+let yesSize = 18;
+let noMessages = ["No 😢", "Please? 🥺", "Are you sure love? 💔", "CMON LOVE YALLA 😩", "PUHLEASEEE 😭", "Last chance 😳"];
+let messageIndex = 0;
+
+// Hearts animation
+function startHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "❤️";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+  }, 300);
+}
+
+// Confetti animation
+function confettiExplosion() {
+  for (let i = 0; i < 120; i++) {
+    const confetti = document.createElement("div");
+    confetti.style.position = "absolute";
+    confetti.style.width = "8px";
+    confetti.style.height = "8px";
+    confetti.style.backgroundColor = "hsl(" + Math.random()*360 + ",100%,50%)";
+    confetti.style.left = window.innerWidth/2 + "px";
+    confetti.style.top = window.innerHeight/2 + "px";
+    confetti.style.borderRadius = "50%";
+    confetti.style.pointerEvents = "none";
+
+    const angle = Math.random()*2*Math.PI;
+    const velocity = Math.random()*8+4;
+    const vx = Math.cos(angle)*velocity;
+    const vy = Math.sin(angle)*velocity;
+
+    document.body.appendChild(confetti);
+
+    let x = window.innerWidth/2;
+    let y = window.innerHeight/2;
+    let gravity = 0.3;
+
+    const interval = setInterval(() => {
+      x += vx; y += vy; vy += gravity;
+      confetti.style.left = x + "px";
+      confetti.style.top = y + "px";
+      if (y > window.innerHeight) { clearInterval(interval); confetti.remove(); }
+    },16);
+  }
+}
+
+// YES button clicked
+function sayYes() {
+  const happyAudio = document.getElementById("happySound");
+  happyAudio.currentTime = 0;
+  happyAudio.play();
+  confettiExplosion();
+  document.body.innerHTML = `
+    <div style="text-align:center; color:white;">
+      <img src="yes page.png" style="width:250px; border-radius:15px;"><br>
+      <h1>YEHEYY, I knew you would say yes 😘</h1>
+      <p>I can't wait for our Valentine's meets love!!❤️</p>
+    </div>
+  `;
+  startHearts();
+}
+
+// Dodge function
+function dodge(button) {
+  const x = Math.random() * (window.innerWidth - button.offsetWidth);
+  const y = Math.random() * (window.innerHeight - button.offsetHeight);
+  button.style.position = "absolute";
+  button.style.left = x + "px";
+  button.style.top = y + "px";
+}
+
+// NO button clicked
+function pressNo() {
+  const noBtn = document.querySelector(".no");
+  const yesBtn = document.querySelector(".yes");
+
+  if (messageIndex < noMessages.length - 1) {
+    messageIndex++;
+    noBtn.innerText = noMessages[messageIndex];
+  }
+
+  yesSize += 5;
+  yesBtn.style.fontSize = yesSize + "px";
+
+  dodge(noBtn);
+}
+</script>
+
+</script>
+
+</body>
+</html>
